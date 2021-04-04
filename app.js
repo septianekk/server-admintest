@@ -6,8 +6,12 @@ var logger = require("morgan");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const session = require("express-session");
+const dotenv = require("dotenv");
 const flash = require("connect-flash");
 // const DB = process.env.DATABASE;
+
+dotenv.config({ path: "config/.env" });
+
 mongoose
   .connect(
     "mongodb+srv://admin-user:admin90@cluster0.rzqnb.mongodb.net/server-appv2?authSource=admin&replicaSet=atlas-kw0a30-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass&retryWrites=true&ssl=true",
@@ -27,6 +31,9 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 // router admin
 const adminRouter = require("./routes/admin");
+// user
+const itemRouter = require("./routes/item");
+const userRouter = require("./routes/users");
 
 var app = express();
 
@@ -54,10 +61,12 @@ app.use(
 );
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
+
 // app.use("/categories", categoryRouter);
 // admin
 app.use("/admin", adminRouter);
+app.use("/api/v1", itemRouter);
+app.use("/api/v1", userRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
