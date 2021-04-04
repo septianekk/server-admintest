@@ -365,7 +365,7 @@ module.exports = {
         imageUrl: `images/${req.file.filename}`,
       });
 
-      const item = await Item.findOne({ _id: itemId });
+      const item = await await Item.findOne({ _id: itemId });
       item.stepId.push({ _id: step._id });
       await item.save();
       req.flash("alertMessage", "Success Add Step");
