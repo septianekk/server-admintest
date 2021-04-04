@@ -45,45 +45,67 @@ module.exports = {
       throw new Error("Invalid email or password");
     }
   }),
+
   // user profile
   getUserProfile: asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user.id);
+    const id = req.params.id;
+    User.findById(id)
+      .select("-password -role")
+      .exec((err, data) => {
+        if (!err) {
+          res.status(200).json({
+            message: `Berhasil Mendapatkan User Dengan ID : ${id}`,
+            data,
+          });
+        } else {
+          res
+            .status(400)
+            .send(`Gagal mendapatkan User Dengan ID : ${id}, ERR : ${err}`);
+        }
+      });
+  }),
 
+  updateProfile: asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    let { name, email, password } = req.body;
+    let updateData = {
+      name: name,
+      email: email,
+      password: password,
+    };
+    // const user = await User.findById(req.user._id);
     // if (user) {
+    //   user.name = req.body.name || user.name;
+    //   user.email = req.body.email || user.email;
+    //   if (req.body.password) {
+    //     user.password = req.body.password;
+    //   }
+    //   const updatedUser = await user.save();
     //   res.json({
-    //     _id: user._id,
-    //     name: user.name,
-    //     email: user.email,
-    //     token: generateToken(user._id),
+    //     _id: updatedUser._id,
+    //     name: updatedUser.name,
+    //     email: updatedUser.email,
+    //     isAdmin: updatedUser.isAdmin,
+    //     token: generateToken(updatedUser._id),
     //   });
     // } else {
     //   res.status(404);
     //   throw new Error("User not found");
     // }
-    res.status(200).json({
-      success: true,
-      user,
-    });
-  }),
-  updateProfile: asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user._id);
-    if (user) {
-      user.name = req.body.name || user.name;
-      user.email = req.body.email || user.email;
-      if (req.body.password) {
-        user.password = req.body.password;
+    User.findByIdAndUpdate(id, updateData, (err, data) => {
+      if (err || data === null) {
+        res.status(400).json({
+          message: "Gagal Update Data",
+          timestamp: req.requestTime,
+        });
+      } else {
+        res.status(200).json({
+          message: `User dengan id = ${id} Berhasil diupdate`,
+          timestamp: req.requestTime,
+          beforeUpate: data,
+          afterUpdate: updateData,
+        });
       }
-      const updatedUser = await user.save();
-      res.json({
-        _id: updatedUser._id,
-        name: updatedUser.name,
-        email: updatedUser.email,
-        isAdmin: updatedUser.isAdmin,
-        token: generateToken(updatedUser._id),
-      });
-    } else {
-      res.status(404);
-      throw new Error("User not found");
-    }
+    });
   }),
 };
