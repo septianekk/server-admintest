@@ -48,64 +48,75 @@ module.exports = {
 
   // user profile
   getUserProfile: asyncHandler(async (req, res) => {
-    const id = req.params.id;
-    User.findById(id)
-      .select("-password -role")
-      .exec((err, data) => {
-        if (!err) {
-          res.status(200).json({
-            message: `Berhasil Mendapatkan User Dengan ID : ${id}`,
-            data,
-          });
-        } else {
-          res
-            .status(400)
-            .send(`Gagal mendapatkan User Dengan ID : ${id}, ERR : ${err}`);
-        }
+    // const id = req.params.id;
+    // User.findById(id)
+    //   .select("-password -role")
+    //   .exec((err, data) => {
+    //     if (!err) {
+    //       res.status(200).json({
+    //         message: `Berhasil Mendapatkan User Dengan ID : ${id}`,
+    //         data,
+    //       });
+    //     } else {
+    //       res
+    //         .status(400)
+    //         .send(`Gagal mendapatkan User Dengan ID : ${id}, ERR : ${err}`);
+    //     }
+    //   });
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+      res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
       });
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
   }),
 
-  updateProfile: asyncHandler(async (req, res) => {
-    const id = req.params.id;
-    let { name, email, password } = req.body;
-    let updateData = {
-      name: name,
-      email: email,
-      password: password,
-    };
-    // const user = await User.findById(req.user._id);
-    // if (user) {
-    //   user.name = req.body.name || user.name;
-    //   user.email = req.body.email || user.email;
-    //   if (req.body.password) {
-    //     user.password = req.body.password;
-    //   }
-    //   const updatedUser = await user.save();
-    //   res.json({
-    //     _id: updatedUser._id,
-    //     name: updatedUser.name,
-    //     email: updatedUser.email,
-    //     isAdmin: updatedUser.isAdmin,
-    //     token: generateToken(updatedUser._id),
-    //   });
-    // } else {
-    //   res.status(404);
-    //   throw new Error("User not found");
-    // }
-    User.findByIdAndUpdate(id, updateData, (err, data) => {
-      if (err || data === null) {
-        res.status(400).json({
-          message: "Gagal Update Data",
-          timestamp: req.requestTime,
-        });
-      } else {
-        res.status(200).json({
-          message: `User dengan id = ${id} Berhasil diupdate`,
-          timestamp: req.requestTime,
-          beforeUpate: data,
-          afterUpdate: updateData,
-        });
-      }
+  logout: (req, res) => {
+    req.session.destroy();
+    res.status(202).json({
+      message: "success logout",
     });
+  },
+
+  updateProfile: asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+    if (user) {
+      user.name = req.body.name || user.name;
+      user.email = req.body.email || user.email;
+      if (req.body.password) {
+        user.password = req.body.password;
+      }
+      const updatedUser = await user.save();
+      res.json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        token: generateToken(updatedUser._id),
+      });
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
+    // User.findByIdAndUpdate(id, updateData, (err, data) => {
+    //   if (err || data === null) {
+    //     res.status(400).json({
+    //       message: "Gagal Update Data",
+    //       timestamp: req.requestTime,
+    //     });
+    //   } else {
+    //     res.status(200).json({
+    //       message: `User dengan id = ${id} Berhasil diupdate`,
+    //       timestamp: req.requestTime,
+    //       beforeUpate: data,
+    //       afterUpdate: updateData,
+    //     });
+    //   }
+    // });
   }),
 };
