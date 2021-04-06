@@ -30,4 +30,11 @@ router.delete(
   adminController.deleteStep
 );
 
+// Order
+router.get("/order", adminController.viewOrder);
+
+// get users
+router.get("/users", adminController.getUsers);
+router.get("/user/:id", adminController.getUserById);
+
 module.exports = router;

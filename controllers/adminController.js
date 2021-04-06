@@ -3,6 +3,7 @@ const Item = require("../models/Item");
 const Image = require("../models/Image");
 const Bahan = require("../models/Bahan");
 const Step = require("../models/Step");
+const User = require("../models/User");
 const fs = require("fs-extra");
 const path = require("path");
 
@@ -427,6 +428,32 @@ module.exports = {
       req.flash("alertMessage", `${error.message}`);
       req.flash("alertStatus", "danger");
       res.redirect(`/admin/item/show-detail-item/${itemId}`);
+    }
+  },
+
+  viewOrder: async (req, res) => {
+    try {
+      res.render("admin/order/view_order");
+    } catch (error) {
+      res.redirect("/admin/order");
+    }
+  },
+
+  // get users
+  getUsers: async (req, res) => {
+    const users = await User.find();
+    res.json(users);
+  },
+
+  // get user by id
+  getUserById: async (req, res) => {
+    const user = await User.findById(req.params.id).select("-password");
+
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404);
+      throw new Error("User not found");
     }
   },
 

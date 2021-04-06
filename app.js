@@ -8,6 +8,7 @@ const methodOverride = require("method-override");
 const session = require("express-session");
 const dotenv = require("dotenv");
 const flash = require("connect-flash");
+const cors = require("cors");
 // const DB = process.env.DATABASE;
 
 dotenv.config({ path: "config/.env" });
@@ -50,6 +51,7 @@ app.use(
     cookie: { maxAge: 60000 },
   })
 );
+app.use(cors());
 app.use(flash());
 app.use(logger("dev"));
 app.use(express.json());

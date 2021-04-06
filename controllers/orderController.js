@@ -1,9 +1,16 @@
 const Order = require("../models/Order");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
+const midtransClient = require("midtrans-client");
 
 module.exports = {
   addOrderItems: asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+    let snap = new midtransClient.Snap({
+      isProduction: false,
+      serverKey: "SB-Mid-server-29QGN312r80149sGHUYD8c86",
+      clientKey: "SB-Mid-client-noZ1PEPVSJV3Bmht",
+    });
     const {
       orderItems,
       shippingInfo,
@@ -11,6 +18,7 @@ module.exports = {
       itemsPrice,
       totalPrice,
     } = req.body;
+
     const order = await Order.create({
       orderItems,
       shippingInfo,
@@ -18,8 +26,26 @@ module.exports = {
       totalPrice,
       paymentMethod,
       paidAt: Date.now(),
-      //   user: req.user._id,
+      user: req.user._id,
     });
+
+    let parameter = {
+      transaction_details: {
+        order_id: order.id,
+        groos_amount: order.totalPrice,
+      },
+      customer_details: {
+        name: user.name,
+        email: user.email,
+      },
+    };
+
+    snap.createTransaction(parameter).then((transaction) => {
+      // transaction redirect_url
+      let redirectUrl = transaction.redirect_url;
+      console.log("redirectUrl:", redirectUrl);
+    });
+
     res.status(200).json({
       success: true,
       order,

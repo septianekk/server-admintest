@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 
 const orderSchema = mongoose.Schema({
-  //   user: {
-  //     type: ObjectId,
-  //     required: true,
-  //     ref: "User",
-  //   },
+  user: {
+    type: ObjectId,
+    required: true,
+    ref: "User",
+  },
   orderItems: [
     {
       name: {
@@ -54,6 +54,10 @@ const orderSchema = mongoose.Schema({
       required: true,
       default: "Indonesia",
     },
+  },
+  paymentUrl: {
+    type: String,
+    required: true,
   },
   paymentMethod: {
     type: String,
