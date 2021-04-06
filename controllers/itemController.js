@@ -5,7 +5,11 @@ const generateToken = require("../utils/generateToken");
 module.exports = {
   // public /api/items
   getAllItem: asyncHandler(async (req, res) => {
-    const item = await Item.find();
+    const item = await Item.find()
+      .select("_id name city price description")
+      .populate({ path: "bahanId", select: "_id name qty imageUrl" })
+      .populate({ path: "stepId", select: "_id name instructions imageUrl" })
+      .populate({ path: "imageId", select: "_id imageUrl" });
     if (!item) {
       res.status(401);
       throw new Error("Item not found");
@@ -18,7 +22,11 @@ module.exports = {
   }),
 
   getItemById: asyncHandler(async (req, res) => {
-    const item = await Item.findById(req.params.id);
+    const item = await Item.findById(req.params.id)
+      .select("_id name city price")
+      .populate({ path: "bahanId", select: "_id name qty imageUrl" })
+      .populate({ path: "stepId", select: "_id name instructions imageUrl" })
+      .populate({ path: "imageId", select: "_id imageUrl" });
     if (item) {
       res.status(200).json({
         message: "success",
