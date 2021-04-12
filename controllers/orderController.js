@@ -11,28 +11,21 @@ module.exports = {
       serverKey: "SB-Mid-server-29QGN312r80149sGHUYD8c86",
       clientKey: "SB-Mid-client-noZ1PEPVSJV3Bmht",
     });
-    const {
-      orderItems,
-      shippingInfo,
-      paymentMethod,
-      itemsPrice,
-      totalPrice,
-    } = req.body;
+    const { userId, itemId, quantity, total, payment_url } = req.body;
 
     const order = await Order.create({
-      orderItems,
-      shippingInfo,
-      itemsPrice,
-      totalPrice,
-      paymentMethod,
-      paidAt: Date.now(),
-      user: req.user._id,
+      userId,
+      itemId,
+      quantity,
+      total,
+      payment_url,
+      userId: req.user._id,
     });
 
     let parameter = {
       transaction_details: {
         order_id: order.id,
-        groos_amount: order.totalPrice,
+        groos_amount: order.total,
       },
       customer_details: {
         name: user.name,
@@ -40,11 +33,20 @@ module.exports = {
       },
     };
 
-    snap.createTransaction(parameter).then((transaction) => {
-      // transaction redirect_url
-      let redirectUrl = transaction.redirect_url;
-      console.log("redirectUrl:", redirectUrl);
-    });
+    snap
+      .createTransaction(parameter)
+      .then((transaction) => {
+        // transaction token
+        let transactionToken = transaction.token;
+        console.log("transactionToken:", transactionToken);
+
+        // transaction redirect url
+        let transactionRedirectUrl = transaction.payment_url;
+        console.log("transactionRedirectUrl:", transactionRedirectUrl);
+      })
+      .catch((e) => {
+        console.log("Error occured:", e.message);
+      });
 
     res.status(200).json({
       success: true,
