@@ -27,10 +27,10 @@ module.exports = {
         order_id: order.id,
         groos_amount: order.total,
       },
-      // customer_details: {
-      //   name: order,
-      //   email: order,
-      // },
+      customer_details: {
+        name: order.name,
+        email: order.email,
+      },
       enaled_payments: [gopay, bank_transfer],
       vtweb: [],
     };
@@ -44,8 +44,8 @@ module.exports = {
 
         // transaction redirect url
         let transactionRedirectUrl = transaction.paymentUrl;
-        order.payment_url = `${transactionRedirectUrl}/${transactionToken}`;
-        await order.save();
+        // order.payment_url = `${transactionRedirectUrl}/${transactionToken}`;
+        // await order.save();
         console.log("transactionRedirectUrl:", transactionRedirectUrl);
       })
       .catch((e) => {
