@@ -12,7 +12,7 @@ const cors = require("cors");
 // const DB = process.env.DATABASE;
 
 dotenv.config({ path: "config/.env" });
-
+//6073ee961ad9664728e87d47
 mongoose
   .connect(
     "mongodb+srv://admin-user:admin90@cluster0.rzqnb.mongodb.net/server-appv2?authSource=admin&replicaSet=atlas-kw0a30-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass&retryWrites=true&ssl=true",
