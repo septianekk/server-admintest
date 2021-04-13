@@ -27,10 +27,12 @@ module.exports = {
         order_id: order.id,
         groos_amount: order.total,
       },
-      customer_details: {
-        name: user.name,
-        email: user.email,
-      },
+      // customer_details: {
+      //   name: order,
+      //   email: order,
+      // },
+      enaled_payments: [gopay, bank_transfer],
+      vtweb: [],
     };
 
     snap
