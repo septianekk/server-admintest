@@ -39,8 +39,8 @@ module.exports = {
       .createTransaction(parameter)
       .then((transaction) => {
         // transaction token
-        let transactionToken = transaction.token;
-        console.log("transactionToken:", transactionToken);
+        // let transactionToken = transaction.token;
+        // console.log("transactionToken:", transactionToken);
 
         // transaction redirect url
         let transactionRedirectUrl = transaction.paymentUrl;
