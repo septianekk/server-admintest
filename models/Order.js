@@ -26,7 +26,7 @@ const orderSchema = mongoose.Schema({
 
   payment_url: {
     type: String,
-    required: true,
+    // required: true,
   },
 
   // orderItems: [
