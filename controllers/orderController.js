@@ -6,11 +6,11 @@ const midtransClient = require("midtrans-client");
 module.exports = {
   addOrderItems: asyncHandler(async (req, res) => {
     // const user = await User.findById(req.user._id);
-    let snap = new midtransClient.Snap({
-      isProduction: false,
-      serverKey: "SB-Mid-server-29QGN312r80149sGHUYD8c86",
-      clientKey: "SB-Mid-client-noZ1PEPVSJV3Bmht",
-    });
+    // let snap = new midtransClient.Snap({
+    //   isProduction: false,
+    //   serverKey: "SB-Mid-server-29QGN312r80149sGHUYD8c86",
+    //   clientKey: "SB-Mid-client-noZ1PEPVSJV3Bmht",
+    // });
     const { userId, itemId, quantity, total, payment_url } = req.body;
 
     const order = await Order.create({
@@ -19,36 +19,36 @@ module.exports = {
       quantity,
       total,
       payment_url,
-      // userId: req.user._id,
+      userId: req.user._id,
     });
 
-    let parameter = {
-      transaction_details: {
-        order_id: order.id,
-        groos_amount: order.total,
-      },
-      // customer_details: {
-      //   name: order,
-      //   email: order,
-      // },
-      enaled_payments: [gopay, bank_transfer],
-      vtweb: [],
-    };
+    // let parameter = {
+    //   transaction_details: {
+    //     order_id: order.id,
+    //     groos_amount: order.total,
+    //   },
+    //   customer_details: {
+    //     name: order,
+    //     email: order,
+    //   },
+    //   enaled_payments: [gopay, bank_transfer],
+    //   vtweb: [],
+    // };
 
-    snap
-      .createTransaction(parameter)
-      .then((transaction) => {
-        // transaction token
-        let transactionToken = transaction.token;
-        console.log("transactionToken:", transactionToken);
+    // snap
+    //   .createTransaction(parameter)
+    //   .then((transaction) => {
+    //     // transaction token
+    //     let transactionToken = transaction.token;
+    //     console.log("transactionToken:", transactionToken);
 
-        // transaction redirect url
-        let transactionRedirectUrl = transaction.payment_url;
-        console.log("transactionRedirectUrl:", transactionRedirectUrl);
-      })
-      .catch((e) => {
-        console.log("Error occured:", e.message);
-      });
+    //     // transaction redirect url
+    //     let transactionRedirectUrl = transaction.payment_url;
+    //     console.log("transactionRedirectUrl:", transactionRedirectUrl);
+    //   })
+    //   .catch((e) => {
+    //     console.log("Error occured:", e.message);
+    //   });
 
     res.status(200).json({
       success: true,
