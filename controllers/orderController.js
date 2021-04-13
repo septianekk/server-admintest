@@ -11,7 +11,7 @@ module.exports = {
     //   serverKey: "SB-Mid-server-29QGN312r80149sGHUYD8c86",
     //   clientKey: "SB-Mid-client-noZ1PEPVSJV3Bmht",
     // });
-    const { userId, itemId, quantity, total, payment_url } = req.body;
+    const { userId, itemId, quantity, total } = req.body;
 
     const order = await Order.create({
       userId,
