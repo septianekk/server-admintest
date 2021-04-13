@@ -45,7 +45,7 @@ module.exports = {
         // transaction redirect url
         let transactionRedirectUrl = transaction.paymentUrl;
         order.payment_url = `${transactionRedirectUrl}/${transactionToken}`;
-        const orderTest = await order.save();
+        const orderTest = order.save();
         console.log("transactionRedirectUrl:", transactionRedirectUrl);
         res.status(200).json({
           success: true,
@@ -55,7 +55,7 @@ module.exports = {
       })
       .catch((e) => {
         console.log("Error occured:", e.message);
-      }); 
+      });
   }),
 
   // get order /api/v1/order/:id
