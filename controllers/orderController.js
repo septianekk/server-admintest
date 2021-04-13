@@ -45,11 +45,11 @@ module.exports = {
         // transaction redirect url
         let transactionRedirectUrl = transaction.paymentUrl;
         order.payment_url = `${transactionRedirectUrl}/${transactionToken}`;
-        const orderTest = order.save();
+        // const orderTest = order.save();
         console.log("transactionRedirectUrl:", transactionRedirectUrl);
         res.status(200).json({
           success: true,
-          orderTest,
+          // orderTest,
           order,
         });
       })
