@@ -18,7 +18,7 @@ module.exports = {
       itemId,
       quantity,
       total,
-      payment_url,
+      // payment_url,
       userId: req.user._id,
     });
 
