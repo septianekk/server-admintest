@@ -44,8 +44,8 @@ module.exports = {
 
         // transaction redirect url
         let transactionRedirectUrl = transaction.paymentUrl;
-        // order.payment_url = `${transactionRedirectUrl}/${transactionToken}`;
-        // await order.save();
+        order.payment_url = `${transactionRedirectUrl}/${transactionToken}`;
+        await order.save();
         console.log("transactionRedirectUrl:", transactionRedirectUrl);
       })
       .catch((e) => {
