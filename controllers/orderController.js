@@ -5,7 +5,7 @@ const midtransClient = require("midtrans-client");
 
 module.exports = {
   addOrderItems: asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user._id);
+    // const user = await User.findById(req.user._id);
     let snap = new midtransClient.Snap({
       isProduction: false,
       serverKey: "SB-Mid-server-29QGN312r80149sGHUYD8c86",
@@ -19,7 +19,7 @@ module.exports = {
       quantity,
       total,
       payment_url,
-      userId: req.user._id,
+      // userId: req.user._id,
     });
 
     let parameter = {
